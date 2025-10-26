@@ -1,6 +1,11 @@
 package com.vyacheslav.todo_api.controllers;
 
+import com.vyacheslav.todo_api.dto.request.TodoCreateRequest;
+import com.vyacheslav.todo_api.dto.request.TodoUpdateRequest;
+import com.vyacheslav.todo_api.dto.response.TodoResponse;
 import com.vyacheslav.todo_api.models.Todo;
+import com.vyacheslav.todo_api.service.TodoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,44 +19,31 @@ import java.util.concurrent.atomic.AtomicLong;
 @RequestMapping("/api/todo")
 public class TodoController {
 
-    private final List<Todo> todos = new ArrayList<>();
-    private final AtomicLong currentId = new AtomicLong(1);
+    private final TodoService todoService;
+
+    public TodoController(TodoService todoService){
+        this.todoService = todoService;
+    }
 
     @GetMapping
-    public List<Todo> getAllTodos() {
-        return todos;
+    @ResponseBody
+    public List<TodoResponse> getAllTodosApi() {
+        return todoService.getAllTodos();
     }
 
     @PostMapping
-    public Todo createTodo(@RequestBody Todo task) {
-        if (task.getTitle() == null || task.getTitle().trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title is required and cannot be empty");
-        }
-        task.setCompleted(false);
-        task.setId(currentId.getAndIncrement());
-        task.setCreatedAt(java.time.LocalDateTime.now());
-        todos.add(task);
-
-        return task;
+    public TodoResponse createTodo(@Valid @RequestBody TodoCreateRequest task) {
+        return todoService.createTodo(task);
     }
 
     @GetMapping("/{id}")
-    public Todo getTaskById(@PathVariable Long id) {
-        return todos.stream()
-                .filter(n -> n.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo with id=" + id + " not found"));
+    public TodoResponse getTaskById(@PathVariable Long id) {
+        return todoService.getTodoById(id);
     }
 
     @PatchMapping("/{id}/complete")
-    public Todo setCompleteTaskStateById(@PathVariable Long id) {
-        Todo task = todos.stream()
-                    .filter(n -> n.getId().equals(id))
-                    .findFirst()
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo with id=" + id + " not found"));
-        task.setCompleted(true);
-
-        return task;
+    public TodoResponse setCompleteTaskStateById(@PathVariable Long id) {
+        return todoService.markAsCompleted(id);
     }
 
     @DeleteMapping("/{id}")
