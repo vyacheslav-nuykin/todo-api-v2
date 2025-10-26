@@ -1,6 +1,5 @@
 package com.vyacheslav.todo_api.dto.response;
 
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

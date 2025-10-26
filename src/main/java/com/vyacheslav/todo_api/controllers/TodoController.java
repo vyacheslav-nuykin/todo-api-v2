@@ -1,19 +1,13 @@
 package com.vyacheslav.todo_api.controllers;
 
 import com.vyacheslav.todo_api.dto.request.TodoCreateRequest;
-import com.vyacheslav.todo_api.dto.request.TodoUpdateRequest;
 import com.vyacheslav.todo_api.dto.response.TodoResponse;
-import com.vyacheslav.todo_api.models.Todo;
 import com.vyacheslav.todo_api.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/api/todo")
@@ -21,13 +15,13 @@ public class TodoController {
 
     private final TodoService todoService;
 
-    public TodoController(TodoService todoService){
+    public TodoController(TodoService todoService) {
         this.todoService = todoService;
     }
 
     @GetMapping
     @ResponseBody
-    public List<TodoResponse> getAllTodosApi() {
+    public List < TodoResponse > getAllTodosApi() {
         return todoService.getAllTodos();
     }
 
