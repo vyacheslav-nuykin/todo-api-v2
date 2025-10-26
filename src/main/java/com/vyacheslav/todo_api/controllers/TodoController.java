@@ -1,5 +1,6 @@
-package com.vyacheslav.todo_api;
+package com.vyacheslav.todo_api.controllers;
 
+import com.vyacheslav.todo_api.models.Todo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

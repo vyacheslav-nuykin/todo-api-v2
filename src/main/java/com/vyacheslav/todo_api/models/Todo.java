@@ -1,4 +1,4 @@
-package com.vyacheslav.todo_api;
+package com.vyacheslav.todo_api.models;
 
 import java.time.LocalDateTime;
 
