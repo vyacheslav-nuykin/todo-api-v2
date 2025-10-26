@@ -95,4 +95,12 @@ public class TodoService {
                 todo.getCreatedAt()
         );
     }
+
+    @Transactional
+    public void deleteById(Long id) {
+        if (!todoRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found");
+        }
+        todoRepository.deleteById(id);
+    }
 }
